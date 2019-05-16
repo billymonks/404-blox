@@ -58,6 +58,9 @@ function create ()
 function update ()
 {
   animateSprites();
+  if (solvable()===true) {
+    console.log('Solvable');
+  }
 }
 
 function animateSprites() {
@@ -120,4 +123,50 @@ function checkNeighbors(gem, color, markedGems) {
 
 }
 
+// Uses the glogal gems array, so no parameter passed in
+function solvable() {
+  // Scan rows left to right (from bottom rows to top rows) and for adjacent colors
 
+  var row = boardHeight - 1;
+  var previous;
+  var currentPos;
+  var current;
+
+  while (row >= 0) {
+    previous = null;
+    currentPos = 0;
+    while (currentPos < boardWidth) {
+      current = gems[currentPos][row];
+      if (previous != null && current != null && previous.colorIndex === current.colorIndex) {
+        return true;
+      } else {
+        previous = current;
+        currentPos++;
+      }
+    }
+    row--;
+  }
+
+  // Scan columns from bottom to top (from left cols to right cols) for adjacent colors
+  // We can bail when we encounter the first null in the column
+  var column = 0;
+
+  while (column < boardWidth) {
+    previous = null;
+    currentPos = boardHeight-1;
+    while (currentPos >= 0) {
+      current = gems[column][currentPos];
+      if (previous != null && current != null && previous.colorIndex === current.colorIndex) {
+        console.log("Vertical: col="+ column + " row=" + currentPos);
+        return true;
+      } else {
+        previous = current;
+        currentPos--;
+      }
+    }
+    column++;
+  }
+
+  // No adjacent colors in rows or columns, so not solvable
+  return false;
+}
