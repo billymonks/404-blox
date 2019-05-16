@@ -39,7 +39,7 @@ const deleteNeighbors = (row, col, color, direction) => {
   if (row < 0 || row >= rowMaxLen || col < 0 || col >= colMaxLen) {
     return 0;
   }
-  if (colorBoard[row][color] != color) {
+  if (colorBoard[row][col] != color) {
     return 0;
   }
   let count = 1;
