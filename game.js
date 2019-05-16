@@ -36,6 +36,7 @@ function create ()
       gems[i][j] =
         {
           sprite: this.add.sprite(i*100+50, j*100+50 , "gems"),
+          spritePosition: [i*100+50, j*100+50],
           color: colors[Math.floor(Math.random()*4)],
           colorIndex: Math.floor(Math.random()*4) //remove when each gem has its own sprite/no longer using setframe
         };
@@ -46,9 +47,17 @@ function create ()
 
 function update ()
 {
+  animateSprites();
+}
+
+function animateSprites() {
   for (var i=0; i<8; i++) {
     for (var j=0; j<8; j++) {
-      // gems[i][j].setFrame(Math.floor(Math.random()*6));
+      let gem = gems[i][j]
+      gem.spritePosition[0] = (gem.spritePosition[0] + i*100+50) / 2;
+      gem.spritePosition[1] = (gem.spritePosition[1] + j*100+50) / 2;
+      gem.sprite.xOffset = gem.spritePosition[0];
+      gem.sprite.yOffset = gem.spritePosition[1];
     }
   }
 }
