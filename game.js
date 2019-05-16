@@ -35,12 +35,11 @@ function create ()
     for (var j=0; j<8; j++) {
       gems[i][j] =
         {
-          sprite: this.add.sprite(i*100+50, j*100+50 , "gems"),
-          spritePosition: [i*100+50, j*100+50],
+          sprite: this.add.sprite(i*100+50, j*100-1000 , "gems"), // -1000 on initial y position so the gems slide in at start
           color: colors[Math.floor(Math.random()*4)],
-          colorIndex: Math.floor(Math.random()*4) //remove when each gem has its own sprite/no longer using setframe
+          colorIndex: Math.floor(Math.random()*4) // remove when each gem has its own sprite/no longer using setframe
         };
-      gems[i][j].setFrame(colorIndex);
+      gems[i][j].sprite.setFrame(gems[i][j].colorIndex);
     }
   }
 }
@@ -53,11 +52,9 @@ function update ()
 function animateSprites() {
   for (var i=0; i<8; i++) {
     for (var j=0; j<8; j++) {
-      let gem = gems[i][j]
-      gem.spritePosition[0] = (gem.spritePosition[0] + i*100+50) / 2;
-      gem.spritePosition[1] = (gem.spritePosition[1] + j*100+50) / 2;
-      gem.sprite.xOffset = gem.spritePosition[0];
-      gem.sprite.yOffset = gem.spritePosition[1];
+      let gem = gems[i][j];
+      gem.sprite.x = Phaser.Math.Interpolation.Bezier([gem.sprite.x, i*100+50], .075);
+      gem.sprite.y = Phaser.Math.Interpolation.Bezier([gem.sprite.y, j*100+50], .075);
     }
   }
 }
