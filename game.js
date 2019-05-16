@@ -63,9 +63,6 @@ function create ()
 function update ()
 {
   animateSprites();
-  if (solvable()===true) {
-    console.log('Solvable');
-  }
 }
 
 function animateSprites() {
@@ -85,6 +82,9 @@ function animateSprites() {
 
 function clickGem(gem) {
   removeGems(gem);
+  if (solvable()===false) {
+    console.log('Not Solvable');
+  }
 }
 
 function removeGems(gem) {
@@ -101,6 +101,7 @@ function removeGems(gem) {
   dropGems();
   slideGems();
   console.log(score);
+
 }
 
 function removeGem(gem) {
