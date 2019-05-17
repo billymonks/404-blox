@@ -1,17 +1,110 @@
 <!DOCTYPE html>
-<html lang=“en”>
-<head>
-    <meta charset=“UTF-8" />
-    <meta name=“viewport” content=“width=device-width, initial-scale=1.0" />
-    <meta http-equiv=“X-UA-Compatible” content=“ie=edge” />
-    <title>404 - Game</title>
+<html>
+  <head>
+    <title>Page Error</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://cdn0.capterra-static.com/assets/images/touch/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+    <link href="http://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet" type="text/css">
+    <style>
+      html { background-color: #044d80; }
+
+      body {
+        font-family: "Roboto Slab", serif;
+        color: white;
+        text-align: center;
+        margin: 0;
+        display: -ms-flexbox;
+        display: flex;
+        height: 100vh;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        background: url(https://cdn0.capterra-static.com/assets/images/maintenance/dark-blue-bg.png) left/cover #044d80 no-repeat;
+        padding: 0 12px 0 12px;
+      }
+
+      .main-container {
+        position: relative;
+        top: 0%;
+      }
+      @media only screen and (max-width: 480px) {
+        .main-container {
+          top: 0%;
+        }
+      }
+
+      .alpha {
+        font-size: 3.5em;
+        line-height: 1.6em;
+        font-weight: 300;
+        font-family: "Roboto Slab", serif;
+        max-width: 785px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      @media only screen and (max-width: 480px) {
+        .alpha {
+          font-size: 2em;
+          line-height: 1.6em;
+        }
+      }
+
+      .delta {
+        font-size: 1.4em;
+        line-height: 1.6em;
+        font-family: "Roboto Slab", serif;
+        margin-bottom: 2em;
+        max-width: 610px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      @media only screen and (max-width: 480px) {
+        .delta {
+          font-size: 1.2em;
+          line-height: 1.7em;
+        }
+      }
+
+      .gamma {
+        font-size: 1em;
+        line-height: 1.6em;
+        font-family: "Roboto Slab", serif;
+        margin-bottom: 2em;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      @media only screen and (max-width: 480px) {
+        .gamma {
+          font-size: 1em;
+          line-height: 1.8em;
+        }
+      }
+
+      a {
+        color: #68c5ed;
+      }
+      a:hover {
+        color: #f89b2d;
+      }
+
+      canvas {
+        padding: 5% 20%;
+      }
+    </style>
     <script src="phaser.min.js"></script>
     <script src="game.js"></script>
-</head>
-<h1>(Cat Ipsum) Love to play with owner's hair tie</h1>
-<body>
-    <div>
-        I just saw other cats inside the house and nobody ask me before using my litter box flex claws on the human's belly and purr like a lawnmower mark territory pooping rainbow while flying in a toasted bread costume in space. Eat grass, throw it back up cat fur is the new black good now the other hand, too sit on the laptop is good you understand your place in my world and litter kitter kitty litty little kitten big roar roar feed me yet meoooow. Intently sniff hand curl into a furry donut going to catch the red dot today going to catch the red dot today. Bite nose of your human catch mouse and gave it as a present. Cat cat moo moo lick ears lick paws meow meow, i tell my human cat snacks, yet scratch my tummy actually i hate you now fight me.
+  </head>
+  <body>
+    <div class="main-container">
+      <h1 class="alpha">404</h1>
+      <p class="delta">Oops! how'd you get here?</p>
+      <p>
+        Maybe you meant
+        <a href="https://www.capterra.com/">search software</a>
+        or
+        <a href="https://www.capterra.com/categories">software categories</a>
+      </p>
     </div>
-</body>
+  </body>
 </html>
