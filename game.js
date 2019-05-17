@@ -26,12 +26,14 @@ const removeSingles = false;
 const colorCount = 4;
 
 let score = 0;
+let level = 1;
 
 let game = new Phaser.Game(config);
 let gameInit = null;
 
 let titleDisplay = null;
 let scoreDisplay = null;
+let levelDisplay = null;
 let instructionsDisplay = null;
 let resetButton = null;
 let messageBox = null;
@@ -62,6 +64,7 @@ function create ()
   createSolvableBoard(this);
   titleDisplay = this.add.text(820, 20, 'CapCrush\n', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
   scoreDisplay = this.add.text(820, 140, '0', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 48 });
+  levelDisplay = this.add.text(820, 200, 'Level ' + level, { fontFamily: '"Roboto Slab"', color: "white", fontSize: 20 });
   resetButton = this.add.text(820, 700, 'Reset Game', { fontFamily: '"Roboto Slab"', color: "#111", fontSize: 24, backgroundColor: '#ddd', padding: 10 });
   resetButton.setInteractive().on('pointerdown', function (pointer) {
     resetGame();
@@ -110,7 +113,9 @@ function createSolvableBoard() {
 
 function resetGame() {
   score = 0;
+  level = 1;
   scoreDisplay.text = score;
+  levelDisplay.text = 'Level ' + level;
   resetBoard();
 }
 
@@ -198,8 +203,10 @@ function removeGems(gem) {
     dropGems();
     slideGems();
     if (checkForClear()) {
-      messageBox.setText('Stage Cleared!');
-      subMessageBox.setText('Now try the next stage!');
+      level += 1;
+      levelDisplay.text = 'Level ' + level;
+      messageBox.setText('Level Cleared!');
+      subMessageBox.setText('Now try level ' + level + '!');
       setTimeout(function() {
         resetBoard();
       }, 3000);
