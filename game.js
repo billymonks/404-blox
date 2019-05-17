@@ -45,7 +45,8 @@ let stuckGems = [];
 let littlePoppa = null;
 let bigPoppa = null;
 let spinSfx = null;
-let pacmanOver = null;
+let gameOver = null;
+let levelUp = null;
 
 function preload ()
 {
@@ -53,7 +54,8 @@ function preload ()
   this.load.audio('bigPop', 'assets/bigPop.mp3');
   this.load.audio('squish', 'assets/squish.mp3');
   this.load.audio('spin', 'assets/spin.wav');
-  this.load.audio('pacmanOver', 'assets/Pacman-death-sound.mp3');
+  this.load.audio('gameOver', 'assets/Pacman-death-sound.mp3');
+  this.load.audio('levelUp', 'assets/LOZ_Fanfare.wav');
   this.load.spritesheet("gems", "assets/gems.png", {
     frameWidth: 100,
     frameHeight: 100
@@ -62,6 +64,11 @@ function preload ()
 
 function create ()
 {
+  littlePoppa = this.sound.add('littlePop');
+  bigPoppa = this.sound.add('bigPop');
+  spinSfx = this.sound.add('spin');
+  gameOver = this.sound.add('gameOver');
+  levelUp = this.sound.add('levelUp');
   gameInit = this;
   createSolvableBoard(this);
   titleDisplay = this.add.text(820, 20, 'CapCrush\n', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
@@ -75,10 +82,9 @@ function create ()
   messageBox = this.add.text(400, 300, '', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
   subMessageBox = this.add.text(400, 350, '', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 24 });
 
-  littlePoppa = this.sound.add('littlePop');
-  bigPoppa = this.sound.add('bigPop');
-  spinSfx = this.sound.add('spin');
-  pacmanOver = this.sound.add('pacmanOver');
+
+
+
 }
 
 function update ()
@@ -189,14 +195,17 @@ function removeGems(gem) {
       bigPoppa.play();
     }
 
-    score += Math.pow(2, markedGems.length);
+    // if (markedGems.length >= 5) {
+      score += markedGems.length * 10 * level * markedGems.length;
+    //} else {
+    //  score += markedGems.length * 10 * level;
+    //}
+
     scoreDisplay.text = score;
     for (let i = 0; i < markedGems.length; i++) {
       removeGem(markedGems[i]);
     }
   } else if (markedGems.length === 1) {
-    console.log(gem);
-    console.log(markedGems[0]);
     makeGemShake(gem);
   }
 
@@ -204,6 +213,7 @@ function removeGems(gem) {
     dropGems();
     slideGems();
     if (checkForClear()) {
+      levelUp.play();
       level += 1;
       levelDisplay.text = 'Level ' + level;
       messageBox.setText('Level Cleared!');
@@ -212,7 +222,7 @@ function removeGems(gem) {
         resetBoard();
       }, 3000);
     } else if (solvable()===false) {
-      pacmanOver.play();
+      gameOver.play();
       messageBox.setText('Game Over');
       subMessageBox.setText('No more valid moves...');
     }
