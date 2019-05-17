@@ -23,13 +23,16 @@ const colors = {
 const boardWidth = 8;
 const boardHeight = 8;
 const removeSingles = false;
-const colorCount = 4;
+const colorCount = 1;
 
 let score = 0;
 
 let game = new Phaser.Game(config);
+let gameInit = null;
 
 let scoreDisplay = null;
+let resetButton = null;
+let messageBox = null;
 
 let deadGems = [];
 
@@ -43,8 +46,14 @@ function preload ()
 
 function create ()
 {
+  gameInit = this;
   createSolvableBoard(this);
-  scoreDisplay = this.add.text(820, 20, 'Score:\n0', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
+  scoreDisplay = this.add.text(820, 20, 'Score\n0', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
+  resetButton = this.add.text(820, 160, 'Reset Game', { fontFamily: '"Roboto Slab"', color: "#111", fontSize: 24, backgroundColor: '#ddd', padding: 10 });
+  resetButton.setInteractive().on('pointerdown', function (pointer) {
+    resetGame();
+  });
+  messageBox = this.add.text(400, 300, '', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
 }
 
 function update ()
@@ -53,7 +62,7 @@ function update ()
   animateDeadGems();
 }
 
-function createSolvableBoard(gameInit) {
+function createSolvableBoard() {
   for (var i = 0; i < boardWidth; i++) {
     gems[i] = [];
     for (var j = 0; j < boardHeight; j++) {
@@ -75,20 +84,33 @@ function createSolvableBoard(gameInit) {
   }
 
   if (!solvable()) {
-    resetGame(gameInit);
+    resetGame();
   }
 }
 
-function resetGame(gameInit) {
+function resetGame() {
+  score = 0;
+  scoreDisplay.text = 'Score\n' + score;
+  resetBoard();
+}
+
+function resetBoard() {
   for(let i=0; i < boardWidth; i++) {
     if (gems[i]) {
       for (let j = 0; j < boardHeight; j++) {
-        gems[i][j].sprite.destroy();
+        if (gems[i][j]) {
+          gems[i][j].sprite.destroy();
+        }
       }
     }
   }
 
-  createSolvableBoard(gameInit);
+  messageBox.setText('');
+  createSolvableBoard();
+}
+
+function checkForClear() {
+  return gems[0][boardHeight - 1] === null;
 }
 
 function animateDeadGems() {
@@ -116,8 +138,13 @@ function animateSprites() {
 
 function clickGem(gem) {
   removeGems(gem);
-  if (solvable()===false) {
-    console.log('Not Solvable');
+  if (checkForClear()) {
+    messageBox.setText('Stage Cleared!');
+    setTimeout(function() {
+      resetBoard();
+    }, 5000);
+  } else if (solvable()===false) {
+    messageBox.setText('Game Over');
   }
 }
 
@@ -128,7 +155,7 @@ function removeGems(gem) {
   //console.log(markedGems);
   if((!removeSingles && markedGems.length > 1) || (removeSingles)) {
     score += Math.pow(2, markedGems.length);
-    scoreDisplay.text = 'Score:\n' + score;
+    scoreDisplay.text = 'Score\n' + score;
     for (let i = 0; i < markedGems.length; i++) {
       removeGem(markedGems[i]);
     }
@@ -193,7 +220,6 @@ function slideGems() {
     if (gems[i][boardHeight - 1] == null) {
       if(!getLowestGemInColumnFromCurentPoint(i, boardHeight - 1)) {
         let slideGem = getLeftMostGemInRowFromCurrentXPositionInBottomRow(i);
-        console.log(slideGem);
         if(slideGem) {
           moveColumn(slideGem.x, i);
         }
@@ -201,8 +227,6 @@ function slideGems() {
     }
   }
 }
-
-
 
 function getLowestGemInColumnFromCurentPoint(x, y) {
   for (let j = y; j >= 0; j--) {
