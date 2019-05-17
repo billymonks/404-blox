@@ -50,13 +50,13 @@ let levelUp = null;
 
 function preload ()
 {
-  this.load.audio('littlePop', 'assets/littlePop.mp3');
-  this.load.audio('bigPop', 'assets/bigPop.mp3');
-  this.load.audio('squish', 'assets/squish.mp3');
-  this.load.audio('spin', 'assets/spin.wav');
-  this.load.audio('gameOver', 'assets/Pacman-death-sound.mp3');
-  this.load.audio('levelUp', 'assets/LOZ_Fanfare.wav');
-  this.load.spritesheet("gems", "assets/gems.png", {
+  this.load.audio('littlePop', '404-blox-assets/littlePop.mp3');
+  this.load.audio('bigPop', '404-blox-assets/bigPop.mp3');
+  this.load.audio('squish', '404-blox-assets/squish.mp3');
+  this.load.audio('spin', '404-blox-assets/spin.wav');
+  this.load.audio('gameOver', '404-blox-assets/Pacman-death-sound.mp3');
+  this.load.audio('levelUp', '404-blox-assets/LOZ_Fanfare.wav');
+  this.load.spritesheet("gems", "404-blox-assets/gems.png", {
     frameWidth: 100,
     frameHeight: 100
   });
