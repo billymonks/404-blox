@@ -27,7 +27,7 @@ const colorCount = 4;
 
 let score = 0;
 
-const game = new Phaser.Game(config);
+let game = new Phaser.Game(config);
 
 let scoreDisplay = null;
 
@@ -43,25 +43,7 @@ function preload ()
 
 function create ()
 {
-  for (var i=0; i < boardWidth; i++) {
-    gems[i] = [];
-    for (var j=0; j < boardHeight; j++) {
-      const colorIndex = Math.floor(Math.random()*colorCount);
-      gems[i][j] =
-        {
-          sprite: this.add.sprite(i*100+50, j*100-1000 , "gems").setInteractive(), // -1000 on initial y position so the gems slide in at start
-          color: colors[colorIndex],
-          colorIndex: colorIndex, // remove when each gem has its own sprite/no longer using setframe
-          x: i,
-          y: j,
-        };
-      let gem = gems[i][j];
-      gems[i][j].sprite.setFrame(gems[i][j].colorIndex);
-      gems[i][j].sprite.on('pointerdown', function(pointer) {
-        clickGem(gem);
-      });
-    }
-  }
+  createSolvableBoard(this);
   scoreDisplay = this.add.text(820, 20, 'Score:\n0', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
 }
 
@@ -69,6 +51,44 @@ function update ()
 {
   animateSprites();
   animateDeadGems();
+}
+
+function createSolvableBoard(gameInit) {
+  for (var i = 0; i < boardWidth; i++) {
+    gems[i] = [];
+    for (var j = 0; j < boardHeight; j++) {
+      const colorIndex = Math.floor(Math.random() * colorCount);
+      gems[i][j] =
+        {
+          sprite: gameInit.add.sprite(i * 100 + 50, j * 100 - 1000, "gems").setInteractive(), // -1000 on initial y position so the gems slide in at start
+          color: colors[colorIndex],
+          colorIndex: colorIndex, // remove when each gem has its own sprite/no longer using setframe
+          x: i,
+          y: j,
+        };
+      let gem = gems[i][j];
+      gems[i][j].sprite.setFrame(gems[i][j].colorIndex);
+      gems[i][j].sprite.on('pointerdown', function (pointer) {
+        clickGem(gem);
+      });
+    }
+  }
+
+  if (!solvable()) {
+    resetGame(gameInit);
+  }
+}
+
+function resetGame(gameInit) {
+  for(let i=0; i < boardWidth; i++) {
+    if (gems[i]) {
+      for (let j = 0; j < boardHeight; j++) {
+        gems[i][j].sprite.destroy();
+      }
+    }
+  }
+
+  createSolvableBoard(gameInit);
 }
 
 function animateDeadGems() {
