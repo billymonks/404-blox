@@ -45,6 +45,7 @@ let stuckGems = [];
 let littlePoppa = null;
 let bigPoppa = null;
 let spinSfx = null;
+let pacmanOver = null;
 
 function preload ()
 {
@@ -52,6 +53,7 @@ function preload ()
   this.load.audio('bigPop', 'assets/bigPop.mp3');
   this.load.audio('squish', 'assets/squish.mp3');
   this.load.audio('spin', 'assets/spin.wav');
+  this.load.audio('pacmanOver', 'assets/Pacman-death-sound.mp3');
   this.load.spritesheet("gems", "assets/gems.png", {
     frameWidth: 100,
     frameHeight: 100
@@ -76,6 +78,7 @@ function create ()
   littlePoppa = this.sound.add('littlePop');
   bigPoppa = this.sound.add('bigPop');
   spinSfx = this.sound.add('spin');
+  pacmanOver = this.sound.add('pacmanOver');
 }
 
 function update ()
@@ -148,10 +151,8 @@ function animateDeadGems() {
 }
 
 function animateStuckGems() {
-
   for (let i = 0; i < stuckGems.length; i++) {
     stuckGems[i].sprite.angle += 36;
-    //stuckGems[i].sprite
   }
 }
 
@@ -211,6 +212,7 @@ function removeGems(gem) {
         resetBoard();
       }, 3000);
     } else if (solvable()===false) {
+      pacmanOver.play();
       messageBox.setText('Game Over');
       subMessageBox.setText('No more valid moves...');
     }
@@ -234,6 +236,9 @@ function removeGem(gem) {
 }
 
 function makeGemShake(gem) {
+  if (stuckGems.includes(gem)) {
+    return;
+  }
   stuckGems.push(gem);
   const stuckGemIndex = stuckGems.length - 1;
   spinSfx.play();
@@ -243,8 +248,6 @@ function makeGemShake(gem) {
   }, 200);
 
 }
-
-
 
 function moveGem(gem, x, y) {
   gems[gem.x][gem.y] = null;
