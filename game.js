@@ -66,7 +66,7 @@ function create ()
   resetButton.setInteractive().on('pointerdown', function (pointer) {
     resetGame();
   });
-  instructionsDisplay = this.add.text(820, 340, 'Clear\nthe\nBoard\n', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 22 });
+  instructionsDisplay = this.add.text(820, 340, 'Clear\nthe\nBoard\n', { fontFamily: '"Roboto Slab"', color: "#999", fontSize: 36 });
   messageBox = this.add.text(400, 300, '', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
   subMessageBox = this.add.text(400, 350, '', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 24 });
 
