@@ -23,7 +23,7 @@ const colors = {
 const boardWidth = 8;
 const boardHeight = 8;
 const removeSingles = false;
-const colorCount = 4;
+const colorCount = 2;
 
 let score = 0;
 
@@ -36,8 +36,14 @@ let messageBox = null;
 
 let deadGems = [];
 
+let littlePoppa = null;
+let bigPoppa = null;
+
 function preload ()
 {
+  this.load.audio('littlePop', 'assets/littlePop.mp3');
+  this.load.audio('bigPop', 'assets/bigPop.mp3');
+  this.load.audio('squish', 'assets/squish.mp3');
   this.load.spritesheet("gems", "assets/gems.png", {
     frameWidth: 100,
     frameHeight: 100
@@ -54,6 +60,9 @@ function create ()
     resetGame();
   });
   messageBox = this.add.text(400, 300, '', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
+
+  littlePoppa = this.sound.add('littlePop');
+  bigPoppa = this.sound.add('bigPop');
 }
 
 function update ()
@@ -138,12 +147,7 @@ function animateSprites() {
 
 function clickGem(gem) {
   removeGems(gem);
-  if (checkForClear()) {
-    messageBox.setText('Stage Cleared!');
-    setTimeout(function() {
-      resetBoard();
-    }, 5000);
-  } else if (solvable()===false) {
+  if (solvable()===false && !checkForClear()) {
     messageBox.setText('Game Over');
   }
 }
@@ -154,6 +158,13 @@ function removeGems(gem) {
   checkNeighbors(gem, color, markedGems);
   //console.log(markedGems);
   if((!removeSingles && markedGems.length > 1) || (removeSingles)) {
+
+    if (markedGems.length < 4) {
+      littlePoppa.play();
+    } else {
+      bigPoppa.play();
+    }
+
     score += Math.pow(2, markedGems.length);
     scoreDisplay.text = 'Score\n' + score;
     for (let i = 0; i < markedGems.length; i++) {
@@ -164,6 +175,12 @@ function removeGems(gem) {
   setTimeout(function() {
     dropGems();
     slideGems();
+    if (checkForClear()) {
+      messageBox.setText('Stage Cleared!');
+      setTimeout(function() {
+        resetBoard();
+      }, 3000);
+    }
   }, 400);
 
 }
