@@ -30,21 +30,26 @@ let score = 0;
 let game = new Phaser.Game(config);
 let gameInit = null;
 
+let titleDisplay = null;
 let scoreDisplay = null;
+let instructionsDisplay = null;
 let resetButton = null;
 let messageBox = null;
 let subMessageBox = null;
 
 let deadGems = [];
+let stuckGems = [];
 
 let littlePoppa = null;
 let bigPoppa = null;
+let spinSfx = null;
 
 function preload ()
 {
   this.load.audio('littlePop', 'assets/littlePop.mp3');
   this.load.audio('bigPop', 'assets/bigPop.mp3');
   this.load.audio('squish', 'assets/squish.mp3');
+  this.load.audio('spin', 'assets/spin.wav');
   this.load.spritesheet("gems", "assets/gems.png", {
     frameWidth: 100,
     frameHeight: 100
@@ -55,22 +60,26 @@ function create ()
 {
   gameInit = this;
   createSolvableBoard(this);
-  scoreDisplay = this.add.text(820, 20, 'Score\n0', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
-  resetButton = this.add.text(820, 160, 'Reset Game', { fontFamily: '"Roboto Slab"', color: "#111", fontSize: 24, backgroundColor: '#ddd', padding: 10 });
+  titleDisplay = this.add.text(820, 20, 'CapCrush\n', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
+  scoreDisplay = this.add.text(820, 140, 'Score\n0', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
+  resetButton = this.add.text(820, 700, 'Reset Game', { fontFamily: '"Roboto Slab"', color: "#111", fontSize: 24, backgroundColor: '#ddd', padding: 10 });
   resetButton.setInteractive().on('pointerdown', function (pointer) {
     resetGame();
   });
+  instructionsDisplay = this.add.text(820, 340, 'Clear\nthe\nBoard\n', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 22 });
   messageBox = this.add.text(400, 300, '', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
   subMessageBox = this.add.text(400, 350, '', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 24 });
 
   littlePoppa = this.sound.add('littlePop');
   bigPoppa = this.sound.add('bigPop');
+  spinSfx = this.sound.add('spin');
 }
 
 function update ()
 {
   animateSprites();
   animateDeadGems();
+  animateStuckGems();
 }
 
 function createSolvableBoard() {
@@ -133,6 +142,14 @@ function animateDeadGems() {
   }
 }
 
+function animateStuckGems() {
+
+  for (let i = 0; i < stuckGems.length; i++) {
+    stuckGems[i].sprite.angle += 36;
+    //stuckGems[i].sprite
+  }
+}
+
 function animateSprites() {
   for (var i=0; i < boardWidth; i++) {
     for (var j=0; j < boardHeight; j++) {
@@ -171,6 +188,10 @@ function removeGems(gem) {
     for (let i = 0; i < markedGems.length; i++) {
       removeGem(markedGems[i]);
     }
+  } else if (markedGems.length === 1) {
+    console.log(gem);
+    console.log(markedGems[0]);
+    makeGemShake(gem);
   }
 
   setTimeout(function() {
@@ -199,9 +220,20 @@ function removeGem(gem) {
 
 
   setTimeout(function(){
-    deadGemIndex.splice(deadGemIndex, 1);
+    deadGems.splice(deadGemIndex, 1);
     gem.sprite.destroy();
   }, 400);
+
+}
+
+function makeGemShake(gem) {
+  stuckGems.push(gem);
+  const stuckGemIndex = stuckGems.length - 1;
+  spinSfx.play();
+  setTimeout(function(){
+    stuckGems.splice(stuckGemIndex, 1);
+    gem.sprite.angle = 0;
+  }, 200);
 
 }
 
