@@ -23,7 +23,7 @@ const colors = {
 const boardWidth = 8;
 const boardHeight = 8;
 const removeSingles = false;
-const colorCount = 2;
+const colorCount = 4;
 
 let score = 0;
 
