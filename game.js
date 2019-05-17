@@ -61,12 +61,12 @@ function create ()
   gameInit = this;
   createSolvableBoard(this);
   titleDisplay = this.add.text(820, 20, 'CapCrush\n', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
-  scoreDisplay = this.add.text(820, 140, 'Score\n0', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
+  scoreDisplay = this.add.text(820, 140, '0', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 48 });
   resetButton = this.add.text(820, 700, 'Reset Game', { fontFamily: '"Roboto Slab"', color: "#111", fontSize: 24, backgroundColor: '#ddd', padding: 10 });
   resetButton.setInteractive().on('pointerdown', function (pointer) {
     resetGame();
   });
-  instructionsDisplay = this.add.text(820, 340, 'Clear\nthe\nBoard\n', { fontFamily: '"Roboto Slab"', color: "#999", fontSize: 36 });
+  instructionsDisplay = this.add.text(820, 300, 'Clear\nthe\nBoard\n', { fontFamily: '"Roboto Slab"', color: "#999", fontSize: 36 });
   messageBox = this.add.text(400, 300, '', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
   subMessageBox = this.add.text(400, 350, '', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 24 });
 
@@ -110,7 +110,7 @@ function createSolvableBoard() {
 
 function resetGame() {
   score = 0;
-  scoreDisplay.text = 'Score\n' + score;
+  scoreDisplay.text = score;
   resetBoard();
 }
 
@@ -184,7 +184,7 @@ function removeGems(gem) {
     }
 
     score += Math.pow(2, markedGems.length);
-    scoreDisplay.text = 'Score\n' + score;
+    scoreDisplay.text = score;
     for (let i = 0; i < markedGems.length; i++) {
       removeGem(markedGems[i]);
     }
