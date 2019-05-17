@@ -31,6 +31,8 @@ const game = new Phaser.Game(config);
 
 let scoreDisplay = null;
 
+let deadGems = [];
+
 function preload ()
 {
   this.load.spritesheet("gems", "assets/gems.png", {
@@ -66,6 +68,15 @@ function create ()
 function update ()
 {
   animateSprites();
+  animateDeadGems();
+}
+
+function animateDeadGems() {
+  for (let i = 0; i < deadGems.length; i++) {
+    deadGems[i].sprite.angle += 36;
+    deadGems[i].sprite.scaleX *= 0.85;
+    deadGems[i].sprite.scaleY *= 0.85;
+  }
 }
 
 function animateSprites() {
@@ -114,32 +125,12 @@ function removeGem(gem) {
 
   gems[gem.x][gem.y] = null;
   gem.sprite.input.enable = false;
+  deadGems.push(gem);
+  const deadGemIndex = deadGems.length - 1;
+
 
   setTimeout(function(){
-    gem.sprite.angle += 20;
-    gem.sprite.scaleX *= 0.75;
-    gem.sprite.scaleY *= 0.75;
-  }, 100);
-
-  setTimeout(function(){
-    gem.sprite.angle += 20;
-    gem.sprite.scaleX *= 0.75;
-    gem.sprite.scaleY *= 0.75;
-  }, 200);
-
-  setTimeout(function(){
-    gem.sprite.angle += 20;
-    gem.sprite.scaleX *= 0.75;
-    gem.sprite.scaleY *= 0.75;
-  }, 300);
-
-  setTimeout(function(){
-    gem.sprite.angle += 20;
-    gem.sprite.scaleX *= 0.75;
-    gem.sprite.scaleY *= 0.75;
-  }, 350);
-
-  setTimeout(function(){
+    deadGemIndex.splice(deadGemIndex, 1);
     gem.sprite.destroy();
   }, 400);
 
