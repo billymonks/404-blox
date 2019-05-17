@@ -33,6 +33,7 @@ let gameInit = null;
 let scoreDisplay = null;
 let resetButton = null;
 let messageBox = null;
+let subMessageBox = null;
 
 let deadGems = [];
 
@@ -60,6 +61,7 @@ function create ()
     resetGame();
   });
   messageBox = this.add.text(400, 300, '', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
+  subMessageBox = this.add.text(400, 350, '', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 24 });
 
   littlePoppa = this.sound.add('littlePop');
   bigPoppa = this.sound.add('bigPop');
@@ -115,6 +117,7 @@ function resetBoard() {
   }
 
   messageBox.setText('');
+  subMessageBox.setText('');
   createSolvableBoard();
 }
 
@@ -147,9 +150,7 @@ function animateSprites() {
 
 function clickGem(gem) {
   removeGems(gem);
-  if (solvable()===false && !checkForClear()) {
-    messageBox.setText('Game Over');
-  }
+
 }
 
 function removeGems(gem) {
@@ -177,9 +178,13 @@ function removeGems(gem) {
     slideGems();
     if (checkForClear()) {
       messageBox.setText('Stage Cleared!');
+      subMessageBox.setText('Now try the next stage!');
       setTimeout(function() {
         resetBoard();
       }, 3000);
+    } else if (solvable()===false) {
+      messageBox.setText('Game Over');
+      subMessageBox.setText('No more valid moves...');
     }
   }, 400);
 
