@@ -1,6 +1,6 @@
 const config = {
   type: Phaser.AUTO,
-  width: 800,
+  width: 1000,
   height: 800,
   scene: {
     preload: preload,
@@ -28,6 +28,8 @@ const colorCount = 4;
 let score = 0;
 
 const game = new Phaser.Game(config);
+
+let scoreDisplay = null;
 
 function preload ()
 {
@@ -58,6 +60,7 @@ function create ()
       });
     }
   }
+  scoreDisplay = this.add.text(820, 20, 'Score:\n0', { fontFamily: '"Roboto Slab"', color: "white", fontSize: 36 });
 }
 
 function update ()
@@ -94,20 +97,55 @@ function removeGems(gem) {
   //console.log(markedGems);
   if((!removeSingles && markedGems.length > 1) || (removeSingles)) {
     score += Math.pow(2, markedGems.length);
+    scoreDisplay.text = 'Score:\n' + score;
     for (let i = 0; i < markedGems.length; i++) {
       removeGem(markedGems[i]);
     }
   }
-  dropGems();
-  slideGems();
-  console.log(score);
+
+  setTimeout(function() {
+    dropGems();
+    slideGems();
+  }, 400);
 
 }
 
 function removeGem(gem) {
-  gem.sprite.destroy();
+
   gems[gem.x][gem.y] = null;
+  gem.sprite.input.enable = false;
+
+  setTimeout(function(){
+    gem.sprite.angle += 20;
+    gem.sprite.scaleX *= 0.75;
+    gem.sprite.scaleY *= 0.75;
+  }, 100);
+
+  setTimeout(function(){
+    gem.sprite.angle += 20;
+    gem.sprite.scaleX *= 0.75;
+    gem.sprite.scaleY *= 0.75;
+  }, 200);
+
+  setTimeout(function(){
+    gem.sprite.angle += 20;
+    gem.sprite.scaleX *= 0.75;
+    gem.sprite.scaleY *= 0.75;
+  }, 300);
+
+  setTimeout(function(){
+    gem.sprite.angle += 20;
+    gem.sprite.scaleX *= 0.75;
+    gem.sprite.scaleY *= 0.75;
+  }, 350);
+
+  setTimeout(function(){
+    gem.sprite.destroy();
+  }, 400);
+
 }
+
+
 
 function moveGem(gem, x, y) {
   gems[gem.x][gem.y] = null;
